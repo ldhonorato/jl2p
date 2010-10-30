@@ -37,6 +37,7 @@ public class CaptureDialog extends JDialog implements ActionListener
 		promiscCheck=new JCheckBox("Modo Promíscuo");
 		promiscCheck.setSelected(true);
 		promiscCheck.setAlignmentX(Component.LEFT_ALIGNMENT);
+		adapterPane.add(promiscCheck);
 		
 		/*
 		filterField=new JTextField(20);
