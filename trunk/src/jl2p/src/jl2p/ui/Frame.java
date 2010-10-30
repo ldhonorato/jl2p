@@ -28,9 +28,9 @@ public class Frame extends JFrame implements ActionListener
 	public Frame(Captor captor){
 		this.captor=captor;
 		tablePane=new TablePane(captor);
-		captor.setJDFrame(this);
+		captor.setFrame(this);
 		
-		setTitle("JpcapDumper Main Window");
+		setTitle("JL2P Sniffer - Gerência de Redes 2010.2 - UNIVERSIDADE DE PERNAMBUCO");
 		
 		/*
 		// Create Menu

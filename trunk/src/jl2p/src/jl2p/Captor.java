@@ -50,7 +50,7 @@ public class Captor {
 
 	Frame frame;
 
-	public void setJDFrame(Frame frame){
+	public void setFrame(Frame frame){
 		this.frame=frame;
 	}
 
