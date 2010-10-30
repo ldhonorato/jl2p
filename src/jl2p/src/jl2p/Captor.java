@@ -158,8 +158,8 @@ public class Captor {
 			int ret =
 				JOptionPane.showConfirmDialog(
 					null,
-					"Save this data?",
-					"Save this data?",
+					"Deseja salvar os dados?",
+					"Deseja salvar os dados?",
 					JOptionPane.YES_NO_OPTION);
 			if (ret == JOptionPane.YES_OPTION)
 				saveToFile();

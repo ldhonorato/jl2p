@@ -24,15 +24,15 @@ public class JL2P
 			Class.forName("jpcap.JpcapCaptor");
 			NetworkInterface[] devices=jpcap.JpcapCaptor.getDeviceList();
 			if(devices.length==0){
-				JOptionPane.showMessageDialog(null,"No network interface found.\nYou need to be admin/su to capture packets.",
+				JOptionPane.showMessageDialog(null,"Nenhuma interface foi encontrada.",
 						"Warning",JOptionPane.WARNING_MESSAGE);
 			}
 		}catch(ClassNotFoundException e){
-			JOptionPane.showMessageDialog(null,"Cannot find Jpcap. Please install Jpcap.",
+			JOptionPane.showMessageDialog(null,"Não foram encontradas as bibliotecas do Jpcap ou do WinPcap no sistema.",
 					"Error",JOptionPane.ERROR_MESSAGE);
 			System.exit(-1);
 		}catch(UnsatisfiedLinkError e){
-			JOptionPane.showMessageDialog(null,"Cannot find Jpcap and/or libpcap/WinPcap.\n Please install Jpcap and libpcap/WinPcap.",
+			JOptionPane.showMessageDialog(null,"Não foram encontradas as bibliotecas do Jpcap ou do WinPcap no sistema.",
 					"Error",JOptionPane.ERROR_MESSAGE);
 			System.exit(-1);
 		}
@@ -49,7 +49,7 @@ public class JL2P
 		try{
 			preferences.flush();
 		} catch (BackingStoreException e) {
-			JOptionPane.showMessageDialog(null,"Could not save preferences.",
+			JOptionPane.showMessageDialog(null,"Não foi possível salvar as preferências.",
 					"Error",JOptionPane.ERROR_MESSAGE);
 		}
 	}
