@@ -31,7 +31,8 @@ public class Frame extends JFrame implements ActionListener
 		captor.setJDFrame(this);
 		
 		setTitle("JpcapDumper Main Window");
-
+		
+		/*
 		// Create Menu
 		JMenuBar menuBar=new JMenuBar();
 		setJMenuBar(menuBar);
@@ -52,12 +53,12 @@ public class Frame extends JFrame implements ActionListener
 		menu=new JMenu("File");
 		menuBar.add(menu);
 		openMenu=new JMenuItem("Open");
-		openMenu.setIcon(getImageIcon("/image/open.gif"));
+		openMenu.setIcon(getImageIcon("/image/open.png"));
 		openMenu.setActionCommand("Open");
 		openMenu.addActionListener(this);
 		menu.add(openMenu);
 		saveMenu=new JMenuItem("Save");
-		saveMenu.setIcon(getImageIcon("/image/save.gif"));
+		saveMenu.setIcon(getImageIcon("/image/save.png"));
 		saveMenu.setActionCommand("Save");
 		saveMenu.addActionListener(this);
 		saveMenu.setEnabled(false);
@@ -67,12 +68,12 @@ public class Frame extends JFrame implements ActionListener
 		menu=new JMenu("Capture");
 		menuBar.add(menu);
 		captureMenu=new JMenuItem("Start");
-		captureMenu.setIcon(getImageIcon("/image/capture.gif"));
+		captureMenu.setIcon(getImageIcon("/image/capture.png"));
 		captureMenu.setActionCommand("Start");
 		captureMenu.addActionListener(this);
 		menu.add(captureMenu);
 		stopMenu=new JMenuItem("Stop");
-		stopMenu.setIcon(getImageIcon("/image/stopcap.gif"));
+		stopMenu.setIcon(getImageIcon("/image/stopcap.png"));
 		stopMenu.setActionCommand("Stop");
 		stopMenu.addActionListener(this);
 		stopMenu.setEnabled(false);
@@ -118,21 +119,26 @@ public class Frame extends JFrame implements ActionListener
 		//Create Toolbar
 		JToolBar toolbar=new JToolBar();
 		toolbar.setFloatable(false);
-		openButton=new JButton(getImageIcon("/image/open.gif"));
+		
+		openButton=new JButton(getImageIcon("/image/open.png"));
 		openButton.setActionCommand("Open");
 		openButton.addActionListener(this);
 		toolbar.add(openButton);
-		saveButton=new JButton(getImageIcon("/image/save.gif"));
+		
+		saveButton=new JButton(getImageIcon("/image/save.png"));
 		saveButton.setActionCommand("Save");
 		saveButton.addActionListener(this);
 		saveButton.setEnabled(false);
 		toolbar.add(saveButton);
+		
 		toolbar.addSeparator();
-		captureButton=new JButton(getImageIcon("/image/capture.gif"));
+		
+		captureButton=new JButton(getImageIcon("/image/capture.png"));
 		captureButton.setActionCommand("Start");
 		captureButton.addActionListener(this);
 		toolbar.add(captureButton);
-		stopButton=new JButton(getImageIcon("/image/stopcap.gif"));
+		
+		stopButton=new JButton(getImageIcon("/image/stopcap.png"));
 		stopButton.setActionCommand("Stop");
 		stopButton.addActionListener(this);
 		stopButton.setEnabled(false);
@@ -242,24 +248,24 @@ public class Frame extends JFrame implements ActionListener
 	}
 	
 	public void enableCapture(){
-		openMenu.setEnabled(true);
+		//openMenu.setEnabled(true);
 		openButton.setEnabled(true);
-		saveMenu.setEnabled(true);
+		//saveMenu.setEnabled(true);
 		saveButton.setEnabled(true);
-		captureMenu.setEnabled(true);
+		//captureMenu.setEnabled(true);
 		captureButton.setEnabled(true);
-		stopMenu.setEnabled(false);
+		//stopMenu.setEnabled(false);
 		stopButton.setEnabled(false);
 	}
 	
 	public void disableCapture(){
-		openMenu.setEnabled(false);
+		//openMenu.setEnabled(false);
 		openButton.setEnabled(false);
-		captureMenu.setEnabled(false);
+		//captureMenu.setEnabled(false);
 		captureButton.setEnabled(false);
-		saveMenu.setEnabled(true);
+		//saveMenu.setEnabled(true);
 		saveButton.setEnabled(true);
-		stopMenu.setEnabled(true);
+		//stopMenu.setEnabled(true);
 		stopButton.setEnabled(true);
 	}
 	
