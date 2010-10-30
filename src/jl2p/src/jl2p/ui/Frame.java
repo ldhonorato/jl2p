@@ -2,6 +2,7 @@ package jl2p.ui;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+
 import jl2p.Captor;
 import jl2p.StatisticsTakerLoader;
 import jl2p.JL2P;
@@ -18,6 +19,10 @@ public class Frame extends JFrame implements ActionListener
 	
 	public TablePane tablePane;
 
+	private JButton graphic1Button;
+
+	private JButton graphic2Button;
+
 	public static Frame openNewWindow(Captor captor){
 		Frame frame=new Frame(captor);
 		frame.setVisible(true);
@@ -30,7 +35,7 @@ public class Frame extends JFrame implements ActionListener
 		tablePane=new TablePane(captor);
 		captor.setFrame(this);
 		
-		setTitle("JL2P Sniffer - Gerência de Redes 2010.2 - UNIVERSIDADE DE PERNAMBUCO");
+		setTitle("JL2P Sniffer - Gerï¿½ncia de Redes 2010.2 - UNIVERSIDADE DE PERNAMBUCO");
 		
 		/*
 		// Create Menu
@@ -115,6 +120,12 @@ public class Frame extends JFrame implements ActionListener
 		menu.add(createLaFMenuItem("Motif","com.sun.java.swing.plaf.motif.MotifLookAndFeel"));
 		menu.add(createLaFMenuItem("Mac","com.sun.java.swing.plaf.mac.MacLookAndFeel"));*/
 		
+		/*JMenuBar menuBar=new JMenuBar();
+		setJMenuBar(menuBar);
+		
+		JMenu menu = new JMenu("View");
+		menuBar.add(menu);
+		tablePane.setTableViewMenu(menu);*/
 		
 		//Create Toolbar
 		JToolBar toolbar=new JToolBar();
@@ -144,10 +155,23 @@ public class Frame extends JFrame implements ActionListener
 		stopButton.setEnabled(false);
 		toolbar.add(stopButton);
 		
+		graphic1Button=new JButton(getImageIcon("/image/graph.png"));
+		graphic1Button.setActionCommand("Graphic1");
+		graphic1Button.addActionListener(this);
+		graphic1Button.setEnabled(false);
+		graphic1Button.setToolTipText("");
+		toolbar.add(graphic1Button);
+		
+		graphic2Button=new JButton(getImageIcon("/image/graphic2.png"));
+		graphic2Button.setActionCommand("Graphic2");
+		graphic2Button.addActionListener(this);
+		graphic2Button.setEnabled(false);
+		graphic1Button.setToolTipText("");
+		toolbar.add(graphic2Button);
+		
 		statusLabel=new JLabel("JpcapDumper started.");
 		
 		getContentPane().setLayout(new BorderLayout());
-		//getContentPane().add(desktop,BorderLayout.CENTER);
 		getContentPane().add(statusLabel,BorderLayout.SOUTH);
 		getContentPane().add(tablePane,BorderLayout.CENTER);
 		getContentPane().add(toolbar,BorderLayout.NORTH);
@@ -179,6 +203,10 @@ public class Frame extends JFrame implements ActionListener
 			captor.capturePacketsFromDevice();
 		}else if(cmd.equals("Stop")){
 			captor.stopCapture();
+		}else if(cmd.equals("Graphic1")){			
+			captor.addContinuousStatFrame(StatisticsTakerLoader.getStatisticsTakerAt(2));
+		}else if(cmd.equals("Graphic2")){			
+			captor.addContinuousStatFrame(StatisticsTakerLoader.getStatisticsTakerAt(3));
 		}else if(cmd.startsWith("CUMSTAT")){
 			int index=Integer.parseInt(cmd.substring(7));
 			captor.addCumulativeStatFrame(StatisticsTakerLoader.getStatisticsTakerAt(index));
@@ -256,6 +284,10 @@ public class Frame extends JFrame implements ActionListener
 		captureButton.setEnabled(true);
 		//stopMenu.setEnabled(false);
 		stopButton.setEnabled(false);
+		
+		graphic1Button.setEnabled(false);
+		graphic2Button.setEnabled(false);
+		
 	}
 	
 	public void disableCapture(){
@@ -267,6 +299,9 @@ public class Frame extends JFrame implements ActionListener
 		saveButton.setEnabled(true);
 		//stopMenu.setEnabled(true);
 		stopButton.setEnabled(true);
+		
+		graphic1Button.setEnabled(true);
+		graphic2Button.setEnabled(true);
 	}
 	
 	private ImageIcon getImageIcon(String path){
