@@ -1,21 +1,23 @@
-package jl2p.stat;
-import jl2p.PacketAnalyzerLoader;
+package jl2p.statistics;
+import jl2p.AnalyzerLoader;
 import jl2p.analyzer.Analyzer;
 import jpcap.packet.*;
 import java.util.*;
 
 
-public class ApplicationProtocolStat extends StatisticsTaker
+public class NetworkProtocolStatistics extends Statistics
 {
 	List<Analyzer> analyzers;
 	long[] numOfPs;
+	long totalPs;
 	long[] sizeOfPs;
-	long totalPs,totalSize;
+	long totalSize;
 	String[] labels;
-	static final String[] types={"# of packets","% of packets","total packet size","% of size"};
+	static final String[] types={"# de pacotes", "% de pacotes", "tamanho total do pacote", "% do tamanho"};
 	
-	public ApplicationProtocolStat(){
-		analyzers=PacketAnalyzerLoader.getAnalyzersOf(Analyzer.APPLICATION_LAYER);
+	
+	public NetworkProtocolStatistics(){
+		analyzers=AnalyzerLoader.getAnalyzersOf(Analyzer.NETWORK_LAYER);
 		numOfPs=new long[analyzers.size()+1];
 		sizeOfPs=new long[analyzers.size()+1];
 
@@ -26,26 +28,27 @@ public class ApplicationProtocolStat extends StatisticsTaker
 	}
 	
 	public String getName(){
-		return "Application Layer Protocol Ratio";
+		return "Protocolo da camada de rede";
 	}
 	
 	public void analyze(List<Packet> packets){
-		for(Packet p:packets){
+		for(int i=0;i<packets.size();i++){
+			Packet p=(Packet)packets.get(i);
 			totalPs++;
+			totalSize+=p.len;
 			
 			boolean flag=false;
 			for(int j=0;j<analyzers.size();j++)
 				if(analyzers.get(j).isAnalyzable(p)){
 					numOfPs[j]++;
-					sizeOfPs[j]+=((IPPacket)p).length;
-					totalSize+=((IPPacket)p).length;
+					totalPs++;
+					sizeOfPs[j]+=p.len;
 					flag=true;
 					break;
 				}
 			if(!flag){
 				numOfPs[numOfPs.length-1]++;
-				sizeOfPs[sizeOfPs.length-1]+=p.len-12;
-				totalSize+=p.len-12;
+				sizeOfPs[sizeOfPs.length-1]+=p.len;
 			}
 		}
 	}
@@ -53,18 +56,17 @@ public class ApplicationProtocolStat extends StatisticsTaker
 	public void addPacket(Packet p){
 		boolean flag=false;
 		totalPs++;
+		totalSize+=p.len;
 		for(int j=0;j<analyzers.size();j++)
 			if(analyzers.get(j).isAnalyzable(p)){
 				numOfPs[j]++;
-				sizeOfPs[j]+=((IPPacket)p).length;
-				totalSize+=((IPPacket)p).length;
+				sizeOfPs[j]+=p.len;
 				flag=true;
 				break;
 			}
 		if(!flag){
 			numOfPs[numOfPs.length-1]++;
-			sizeOfPs[sizeOfPs.length-1]+=p.len-12;
-			totalSize+=p.len-12;
+			sizeOfPs[sizeOfPs.length-1]+=p.len;
 		}
 	}
 	
@@ -100,51 +102,7 @@ public class ApplicationProtocolStat extends StatisticsTaker
 				return null;
 		}
 	}
-/*	int[] getValues(){
-		return numOfPs;
-	}
-	
-	String[] getTableLabels(){
-		String[] ls=new String[labels.length+1];
-		ls[0]=new String();
-		System.arraycopy(labels,0,ls,1,labels.length);
 		
-		return ls;
-	}
-	
-	Object[][] getTableValues(){
-		if(numOfPs==null) return new Object[0][0];
-		long sum=0;
-		Object[][] obj=new Object[4][labels.length+1];
-		
-		obj[0][0]="# of packets";
-		for(int i=0;i<numOfPs.length;i++){
-			obj[0][i+1]=new Long(numOfPs[i]);
-			sum+=numOfPs[i];
-		}
-		
-		obj[1][0]="% of packet #";
-		for(int i=0;i<numOfPs.length;i++){
-			if(sum==0) obj[1][i+1]=new Integer(0);
-			else obj[1][i+1]=new Integer(numOfPs[i]*100/(int)sum);
-		}
-		
-		sum=0;
-		obj[2][0]="size of packets";
-		for(int i=0;i<sizeOfPs.length;i++){
-			obj[2][i+1]=new Long(sizeOfPs[i]);
-			sum+=sizeOfPs[i];
-		}
-		
-		obj[3][0]="% of size";
-		for(int i=0;i<sizeOfPs.length;i++){
-			if(sum==0) obj[3][i+1]=new Long(0);
-			else obj[3][i+1]=new Long(sizeOfPs[i]*100/sum);
-		}
-		
-		return obj;
-	}
-	*/
 	public void clear(){
 		numOfPs=new long[analyzers.size()+1];
 		sizeOfPs=new long[analyzers.size()+1];

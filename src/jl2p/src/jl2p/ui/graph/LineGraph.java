@@ -112,10 +112,6 @@ public class LineGraph extends JPanel
 					Color c=colors[j%colors.length];
 					for(int k=0;k<j/colors.length;k++) c.darker();
 					g.setColor(c);
-					
-					//((Graphics2D)g).setStroke(new BasicStroke(2.0f));
-					//((Graphics2D)g).draw(new Line2D.Double((int)(x-d),h+marginY-(vv[j]-minValue)*h/h2,
-					//		(int)x,h+marginY-(v[j]-minValue)*h/h2));
 					g.drawLine((int)(x-d),(int)(h+marginY-(vv[j]-minValue)*h/h2),(int)x,(int)(h+marginY-(v[j]-minValue)*h/h2));
 				}
 				

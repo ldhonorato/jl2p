@@ -1,5 +1,5 @@
 package jl2p.ui;
-import jl2p.PacketAnalyzerLoader;
+import jl2p.AnalyzerLoader;
 import jl2p.analyzer.Analyzer;
 import jpcap.packet.*;
 import java.awt.*;
@@ -13,7 +13,7 @@ class TableTree extends JComponent
 {
 	JTree tree;
 	DefaultMutableTreeNode root=new DefaultMutableTreeNode();
-	List<Analyzer> analyzers=PacketAnalyzerLoader.getAnalyzers();
+	List<Analyzer> analyzers=AnalyzerLoader.getAnalyzers();
 	
 	TableTree(){
 		tree=new JTree(root);
@@ -46,9 +46,7 @@ class TableTree extends JComponent
 						addNodes(node,names[j],(Vector)values[j]);
 					}else if(values[j]!=null){
 						addNode(node,names[j]+": "+values[j]);
-					}/*else{
-						addNode(node,names[j]+": Not available");
-					}*/
+					}
 				}
 			}
 		}

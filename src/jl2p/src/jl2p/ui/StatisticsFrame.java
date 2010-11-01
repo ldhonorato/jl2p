@@ -5,14 +5,13 @@ import java.awt.event.ActionListener;
 import jpcap.packet.*;
 import javax.swing.*;
 
-public abstract class StatFrame extends JFrame
+public abstract class StatisticsFrame extends JFrame
 {
-	StatFrame(String title){
+	StatisticsFrame(String title){
 		super(title);
-		JDStatFrameUpdater.start();
+		frameUpdater.start();
 		addWindowListener(new java.awt.event.WindowAdapter(){
 			public void windowClosed(java.awt.event.WindowEvent evt){
-				//hide();
 				setVisible(false);
 			}
 		});
@@ -22,17 +21,17 @@ public abstract class StatFrame extends JFrame
 	public abstract void clear();
 
 	public void startUpdating(){
-		JDStatFrameUpdater.setRepeats(true);
-		JDStatFrameUpdater.start();
+		frameUpdater.setRepeats(true);
+		frameUpdater.start();
 	}
 	
 	public void stopUpdating(){
-		JDStatFrameUpdater.stop();
-		JDStatFrameUpdater.setRepeats(false);
-		JDStatFrameUpdater.start();
+		frameUpdater.stop();
+		frameUpdater.setRepeats(false);
+		frameUpdater.start();
 	}
 
-	javax.swing.Timer JDStatFrameUpdater=new javax.swing.Timer(500,new ActionListener(){
+	javax.swing.Timer frameUpdater=new javax.swing.Timer(500,new ActionListener(){
 		public void actionPerformed(ActionEvent evt){
 			fireUpdate();
 			repaint();
