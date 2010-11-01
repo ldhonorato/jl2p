@@ -4,26 +4,26 @@ import java.util.List;
 
 import jl2p.statistics.ApplicationProtocolStatistics;
 import jl2p.statistics.NetworkProtocolStatistics;
-import jl2p.statistics.PacketStatistics;
+import jl2p.statistics.DataLinkStatistics;
 import jl2p.statistics.Statistics;
 import jl2p.statistics.TransportProtocolStatistics;
 
 public class StatisticsLoader
 {
-	static ArrayList<Statistics> stakers=new ArrayList<Statistics>();
+	static ArrayList<Statistics> statistics=new ArrayList<Statistics>();
 	
-	static void loadStatisticsTaker(){
-		stakers.add(new PacketStatistics());
-		stakers.add(new NetworkProtocolStatistics());
-		stakers.add(new TransportProtocolStatistics());
-		stakers.add(new ApplicationProtocolStatistics());
+	static void loadDefaultStatistics(){
+		statistics.add(new DataLinkStatistics());
+		statistics.add(new NetworkProtocolStatistics());
+		statistics.add(new TransportProtocolStatistics());
+		statistics.add(new ApplicationProtocolStatistics());
 	}
 	
-	public static List<Statistics> getStatisticsTakers(){
-		return stakers;
+	public static List<Statistics> getStatistics(){
+		return statistics;
 	}
 	
-	public static Statistics getStatisticsTakerAt(int index){
-		return stakers.get(index);
+	public static Statistics getStatisticAt(int index){
+		return statistics.get(index);
 	}
 }

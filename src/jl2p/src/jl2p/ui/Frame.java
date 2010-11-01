@@ -119,9 +119,9 @@ public class Frame extends JFrame implements ActionListener {
 		} else if (cmd.equals("Stop")) {
 			captor.stopCapture();
 		} else if (cmd.equals("Graphic1")) {
-			captor.addContinuousStatFrame(StatisticsLoader.getStatisticsTakerAt(2));
+			captor.addContinuousStatFrame(StatisticsLoader.getStatisticAt(2));
 		} else if (cmd.equals("Graphic2")) {
-			captor.addContinuousStatFrame(StatisticsLoader.getStatisticsTakerAt(3));
+			captor.addContinuousStatFrame(StatisticsLoader.getStatisticAt(3));
 		} 
 	}
 
@@ -142,8 +142,12 @@ public class Frame extends JFrame implements ActionListener {
 
 	javax.swing.Timer frameUpdater = new javax.swing.Timer(500, new ActionListener() {
 		public void actionPerformed(ActionEvent evt) {
-			tablePane.fireTableChanged();
-			statusLabel.setText("Capturado(s): " + captor.getPackets().size() + " pacote(s).");
+			try {
+				tablePane.fireTableChanged();
+				statusLabel.setText("Capturado(s): " + captor.getPackets().size() + " pacote(s).");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 
 			repaint();
 		}
