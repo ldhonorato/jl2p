@@ -40,7 +40,7 @@ public class JL2P
 		preferences=Preferences.userNodeForPackage(JL2P.class);
 		
 		AnalyzerLoader.loadDefaultAnalyzer();
-		StatisticsLoader.loadStatisticsTaker();
+		StatisticsLoader.loadDefaultStatistics();
 		
 		openNewWindow();
 	}

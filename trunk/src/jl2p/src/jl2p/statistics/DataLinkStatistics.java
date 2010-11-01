@@ -2,7 +2,7 @@ package jl2p.statistics;
 import jpcap.packet.*;
 import java.util.*;
 
-public class PacketStatistics extends Statistics
+public class DataLinkStatistics extends Statistics
 {
 	static final String[] types={
 		"Total de pacote #",
