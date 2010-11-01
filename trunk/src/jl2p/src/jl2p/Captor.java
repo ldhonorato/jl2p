@@ -1,9 +1,3 @@
-/*
- * Created on Apr 4, 2003
- *
- * To change the template for this generated file go to
- * Window>Preferences>Java>Code Generation>Code and Comments
- */
 package jl2p;
 
 import java.io.File;
@@ -12,59 +6,49 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Vector;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
-
-import jl2p.stat.StatisticsTaker;
+import jl2p.statistics.Statistics;
 import jl2p.ui.CaptureDialog;
 import jl2p.ui.ContinuousStatFrame;
-import jl2p.ui.CumlativeStatFrame;
 import jl2p.ui.Frame;
-import jl2p.ui.StatFrame;
+import jl2p.ui.StatisticsFrame;
 import jpcap.JpcapCaptor;
-import jpcap.PacketReceiver;
 import jpcap.JpcapWriter;
+import jpcap.PacketReceiver;
 import jpcap.packet.IPPacket;
 import jpcap.packet.Packet;
 
-/**
- * @author kfujii
- *
- * To change the template for this generated type comment go to
- * Window>Preferences>Java>Code Generation>Code and Comments
- */
 public class Captor {
-	long MAX_PACKETS_HOLD=10000;
+	long MAX_PACKETS_HOLD = 10000;
 
 	List<Packet> packets = new ArrayList<Packet>();
 
-	JpcapCaptor jpcap=null;
+	JpcapCaptor jpcap = null;
 
 	boolean isLiveCapture;
 	boolean isSaved = false;
 
 	Frame frame;
 
-	public void setFrame(Frame frame){
-		this.frame=frame;
+	public void setFrame(Frame frame) {
+		this.frame = frame;
 	}
 
-	public List<Packet> getPackets(){
+	public List<Packet> getPackets() {
 		return packets;
 	}
 
-
 	public void capturePacketsFromDevice() {
-		if(jpcap!=null)
+		if (jpcap != null)
 			jpcap.close();
 		jpcap = CaptureDialog.getJpcap(frame);
 		clear();
-		
+
 		if (jpcap != null) {
 			isLiveCapture = true;
 			frame.disableCapture();
@@ -82,14 +66,12 @@ public class Captor {
 			String path = JL2P.chooser.getSelectedFile().getPath();
 
 			try {
-				if(jpcap!=null){
+				if (jpcap != null) {
 					jpcap.close();
 				}
 				jpcap = JpcapCaptor.openFile(path);
 			} catch (java.io.IOException e) {
-				JOptionPane.showMessageDialog(
-					frame,
-					"Can't open file: " + path);
+				JOptionPane.showMessageDialog(frame, "Não foi possível abrir o arquivo: " + path);
 				e.printStackTrace();
 				return;
 			}
@@ -100,12 +82,12 @@ public class Captor {
 		}
 	}
 
-	private void clear(){
+	private void clear() {
 		packets.clear();
 		frame.clear();
 
-		for(int i=0;i<sframes.size();i++)
-			((StatFrame)sframes.get(i)).clear();
+		for (int i = 0; i < sframes.size(); i++)
+			((StatisticsFrame) sframes.get(i)).clear();
 	}
 
 	public void saveToFile() {
@@ -117,34 +99,24 @@ public class Captor {
 			File file = JL2P.chooser.getSelectedFile();
 
 			if (file.exists()) {
-				if (JOptionPane
-					.showConfirmDialog(
-						frame,
-						"Overwrite " + file.getName() + "?",
-						"Overwrite?",
-						JOptionPane.YES_NO_OPTION)
-					== JOptionPane.NO_OPTION) {
+				if (JOptionPane.showConfirmDialog(frame, "Substituir " + file.getName() + "?", "Substituir?", JOptionPane.YES_NO_OPTION) == JOptionPane.NO_OPTION) {
 					return;
 				}
 			}
 
 			try {
-				//System.out.println("link:"+info.linktype);
-				//System.out.println(lastJpcap);
-				JpcapWriter writer = JpcapWriter.openDumpFile(jpcap,file.getPath());
+				JpcapWriter writer = JpcapWriter.openDumpFile(jpcap, file.getPath());
 
-				for (Packet p:packets) {
+				for (Packet p : packets) {
 					writer.writePacket(p);
 				}
 
 				writer.close();
 				isSaved = true;
-				//JOptionPane.showMessageDialog(frame,file+" was saved correctly.");
+
 			} catch (java.io.IOException e) {
 				e.printStackTrace();
-				JOptionPane.showMessageDialog(
-					frame,
-					"Can't save file: " + file.getPath());
+				JOptionPane.showMessageDialog(frame, "Não foi possível salvar o arquivo: " + file.getPath());
 			}
 		}
 	}
@@ -155,32 +127,22 @@ public class Captor {
 
 	public void saveIfNot() {
 		if (isLiveCapture && !isSaved) {
-			int ret =
-				JOptionPane.showConfirmDialog(
-					null,
-					"Deseja salvar os dados?",
-					"Deseja salvar os dados?",
-					JOptionPane.YES_NO_OPTION);
+			int ret = JOptionPane.showConfirmDialog(null, "Deseja salvar os dados?", "Deseja salvar os dados?", JOptionPane.YES_NO_OPTION);
 			if (ret == JOptionPane.YES_OPTION)
 				saveToFile();
 		}
 	}
 
-	List<StatFrame> sframes=new ArrayList<StatFrame>();
-	public void addCumulativeStatFrame(StatisticsTaker taker) {
-		sframes.add(CumlativeStatFrame.openWindow(packets,taker.newInstance()));
+	List<StatisticsFrame> sframes = new ArrayList<StatisticsFrame>();
+
+	public void addContinuousStatFrame(Statistics taker) {
+		sframes.add(ContinuousStatFrame.openWindow(packets, taker.newInstance()));
 	}
 
-	public void addContinuousStatFrame(StatisticsTaker taker) {
-		sframes.add(ContinuousStatFrame.openWindow(packets,taker.newInstance()));
+	public void closeAllWindows() {
+		for (int i = 0; i < sframes.size(); i++)
+			((StatisticsFrame) sframes.get(i)).dispose();
 	}
-
-	public void closeAllWindows(){
-		for(int i=0;i<sframes.size();i++)
-			((StatFrame)sframes.get(i)).dispose();
-	}
-
-
 
 	private Thread captureThread;
 
@@ -188,8 +150,7 @@ public class Captor {
 		if (captureThread != null)
 			return;
 
-		captureThread = new Thread(new Runnable(){
-			//body of capture thread
+		captureThread = new Thread(new Runnable() {
 			public void run() {
 				while (captureThread != null) {
 					if (jpcap.processPacket(1, handler) == 0 && !isLiveCapture)
@@ -198,32 +159,31 @@ public class Captor {
 				}
 
 				jpcap.breakLoop();
-				//jpcap = null;
 				frame.enableCapture();
 			}
 		});
 		captureThread.setPriority(Thread.MIN_PRIORITY);
-		
+
 		frame.startUpdating();
-		for(int i=0;i<sframes.size();i++){
-			((StatFrame)sframes.get(i)).startUpdating();
+		for (int i = 0; i < sframes.size(); i++) {
+			((StatisticsFrame) sframes.get(i)).startUpdating();
 		}
-		
+
 		captureThread.start();
 	}
 
 	void stopCaptureThread() {
 		captureThread = null;
 		frame.stopUpdating();
-		for(int i=0;i<sframes.size();i++){
-			((StatFrame)sframes.get(i)).stopUpdating();
+		for (int i = 0; i < sframes.size(); i++) {
+			((StatisticsFrame) sframes.get(i)).stopUpdating();
 		}
 	}
 
-	private ExecutorService exe=Executors.newFixedThreadPool(10);
-	public static final Map<InetAddress,String> hostnameCache=new HashMap<InetAddress, String>();
-	
-	private PacketReceiver handler=new PacketReceiver(){
+	private ExecutorService exe = Executors.newFixedThreadPool(10);
+	public static final Map<InetAddress, String> hostnameCache = new HashMap<InetAddress, String>();
+
+	private PacketReceiver handler = new PacketReceiver() {
 		public void receivePacket(final Packet packet) {
 			packets.add(packet);
 			while (packets.size() > MAX_PACKETS_HOLD) {
@@ -231,19 +191,19 @@ public class Captor {
 			}
 			if (!sframes.isEmpty()) {
 				for (int i = 0; i < sframes.size(); i++)
-					((StatFrame)sframes.get(i)).addPacket(packet);
+					((StatisticsFrame) sframes.get(i)).addPacket(packet);
 			}
 			isSaved = false;
-			
-			if(packet instanceof IPPacket){
-				exe.execute(new Runnable(){
+
+			if (packet instanceof IPPacket) {
+				exe.execute(new Runnable() {
 					public void run() {
-						IPPacket ip=(IPPacket)packet;
-						if(!hostnameCache.containsKey(ip.src_ip))
-							hostnameCache.put(ip.src_ip,ip.src_ip.getHostName());
-						if(!hostnameCache.containsKey(ip.dst_ip))
-							hostnameCache.put(ip.dst_ip,ip.dst_ip.getHostName());
-						System.out.println(hostnameCache.size());
+						IPPacket ip = (IPPacket) packet;
+						if (!hostnameCache.containsKey(ip.src_ip))
+							hostnameCache.put(ip.src_ip, ip.src_ip.getHostName());
+						if (!hostnameCache.containsKey(ip.dst_ip))
+							hostnameCache.put(ip.dst_ip, ip.dst_ip.getHostName());
+//						System.out.println(hostnameCache.size());
 					}
 				});
 			}

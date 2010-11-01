@@ -1,23 +1,24 @@
-package jl2p.stat;
+package jl2p.statistics;
 import jpcap.packet.*;
 import java.util.*;
 
-public class PacketStat extends StatisticsTaker
+public class PacketStatistics extends Statistics
 {
 	static final String[] types={
-		"Total packet #",
-		"Total packet size",
-		"Average packet size",
+		"Total de pacote #",
+		"Tamanho total do pacote",
+		"Tamanho médio do pacote",
 		"bits/s",
 		"pkts/s"
 	};
+		
 	static final String[] label={"Value"};
 	
 	long numOfPs,sizeOfPs;
 	Date first,last;
 	
 	public String getName(){
-		return "Overall information";
+		return "Informações gerais";
 	}
 	
 	public void analyze(List<Packet> packets){
@@ -74,34 +75,7 @@ public class PacketStat extends StatisticsTaker
 				return null;
 		}
 	}
-	/*
-	String[] getTableLabels(){
-		return labels;
-	}
 	
-	Object[][] getTableValues(){
-		Object[][] obj=new Object[1][5];
-		
-		obj[0][0]=new Long(numOfPs);
-		obj[0][1]=new Long(sizeOfPs);
-		obj[0][2]=new Long(sizeOfPs/numOfPs);
-		if(first==null){
-			obj[0][3]=new Long(0);
-			obj[0][4]=new Long(0);
-		}else{
-			long sec=(last.getTime()-first.getTime())*1000;
-			if(sec==0){
-				obj[0][3]=new Long(0);
-				obj[0][4]=new Long(0);
-			}else{
-				obj[0][3]=new Double((double)sizeOfPs*8.0/sec);
-				obj[0][4]=new Double((double)numOfPs/sec);
-			}
-		}
-		
-		return obj;
-	}
-	*/
 	public void clear(){
 		numOfPs=0;sizeOfPs=0;
 		first=null;last=null;

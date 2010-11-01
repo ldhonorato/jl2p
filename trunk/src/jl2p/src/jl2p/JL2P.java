@@ -39,8 +39,8 @@ public class JL2P
 		
 		preferences=Preferences.userNodeForPackage(JL2P.class);
 		
-		PacketAnalyzerLoader.loadDefaultAnalyzer();
-		StatisticsTakerLoader.loadStatisticsTaker();
+		AnalyzerLoader.loadDefaultAnalyzer();
+		StatisticsLoader.loadStatisticsTaker();
 		
 		openNewWindow();
 	}
@@ -61,7 +61,7 @@ public class JL2P
 	
 	public static void closeWindow(Frame frame){
 		frame.captor.stopCapture();
-		frame.captor.saveIfNot();
+//		frame.captor.saveIfNot();
 		frame.captor.closeAllWindows();
 		frames.remove(frame);
 		frame.dispose();

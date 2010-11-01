@@ -1,22 +1,30 @@
 package jl2p.ui;
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import javax.swing.event.*;
-import java.util.*;
+import java.awt.BorderLayout;
+import java.awt.Component;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
+import java.util.StringTokenizer;
+
+import javax.swing.JCheckBoxMenuItem;
+import javax.swing.JMenu;
+import javax.swing.JMenuItem;
+import javax.swing.JPanel;
+import javax.swing.JSplitPane;
+import javax.swing.ListSelectionModel;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import jl2p.Captor;
-import jl2p.PacketAnalyzerLoader;
 import jl2p.JL2P;
+import jl2p.AnalyzerLoader;
 import jl2p.analyzer.Analyzer;
-import jpcap.packet.*;
+import jpcap.packet.Packet;
 
 class TablePane extends JPanel implements ActionListener, ListSelectionListener {
 	Table table;
-	TableTree tree;
-	TableTextArea text;
+	TableTree tree;	
 	Captor captor;
 	List<Analyzer> analyzers;
 
@@ -26,13 +34,12 @@ class TablePane extends JPanel implements ActionListener, ListSelectionListener 
 		this.captor = captor;
 		table = new Table(this, captor);
 		tree = new TableTree();
-		text = new TableTextArea();
+		
 
 		JSplitPane splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
 		JSplitPane splitPane2 = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
 		splitPane.setTopComponent(table);
 		splitPane2.setTopComponent(tree);
-		// splitPane2.setBottomComponent(new JScrollPane(text));
 		splitPane.setBottomComponent(splitPane2);
 		splitPane.setDividerLocation(200);
 		splitPane2.setDividerLocation(200);
@@ -41,7 +48,7 @@ class TablePane extends JPanel implements ActionListener, ListSelectionListener 
 		tableViewMenu[1] = new JMenu("Network Layer");
 		tableViewMenu[2] = new JMenu("Transport Layer");
 		tableViewMenu[3] = new JMenu("Application Layer");
-		analyzers = PacketAnalyzerLoader.getAnalyzers();
+		analyzers = AnalyzerLoader.getAnalyzers();
 		JMenuItem item, subitem;
 
 		for (int i = 0; i < analyzers.size(); i++) {
@@ -58,34 +65,6 @@ class TablePane extends JPanel implements ActionListener, ListSelectionListener 
 			}
 			tableViewMenu[analyzer.layer].add(item);
 		}
-
-		/*StringTokenizer status = null;
-		StringTokenizer s = null;
-		
-		StringBuilder sb = new StringBuilder();	
-		sb.append("Ethernet Frame:Source MAC,");
-		sb.append("Ethernet Frame:Destination MAC,");
-		sb.append("IPv4:Source IP,");
-		sb.append("IPv4:Destination IP,");
-		sb.append("Packet Information:Captured Time,");
-		sb.append("Packet Information:Captured Length");
-		
-		
-		for (Analyzer analyzer : analyzers) {
-			status = new StringTokenizer(sb.toString(),",");
-			
-			for (int i = 0; i < status.countTokens(); i++) {
-				s = new StringTokenizer(status.nextToken(), ":");				
-				if (s.countTokens() == 2) {
-					String name = s.nextToken(), valueName = s.nextToken();
-					
-					if (analyzer.getProtocolName().equals(name)) {
-						table.setTableView(analyzer, valueName, true);	
-						break;
-					}
-				}
-			}
-		}*/
 
 		setLayout(new BorderLayout());
 		add(splitPane, BorderLayout.CENTER);
@@ -126,8 +105,7 @@ class TablePane extends JPanel implements ActionListener, ListSelectionListener 
 		int index = ((ListSelectionModel) evt.getSource()).getMinSelectionIndex();
 		if (index >= 0) {
 			Packet p = (Packet) captor.getPackets().get(table.sorter.getOriginalIndex(index));
-			tree.analyzePacket(p);
-			text.showPacket(p);
+			tree.analyzePacket(p);			
 		}
 	}
 
@@ -152,14 +130,13 @@ class TablePane extends JPanel implements ActionListener, ListSelectionListener 
 			StringTokenizer s = new StringTokenizer(status.nextToken(), ":");
 			if (s.countTokens() == 2) {
 				String name = s.nextToken(), valueName = s.nextToken();
-				// for(int i=0;i<analyzers.length;i++)
-				// if(analyzers[i].getProtocolName().equals(name)){
+
 				for (int i = 0; i < menus.length; i++) {
 					if (((JMenu) menus[i]).getText() == null || name == null)
 						continue;
 					if (((JMenu) menus[i]).getText().equals(name)) {
 						Component[] vn = ((JMenu) menus[i]).getMenuComponents();
-						// table.setTableView(analyzers[i],n,true);
+
 						for (int j = 0; j < vn.length; j++)
 							if (valueName.equals(((JCheckBoxMenuItem) vn[j]).getText())) {
 								((JCheckBoxMenuItem) vn[j]).setState(true);
@@ -184,7 +161,7 @@ class TablePane extends JPanel implements ActionListener, ListSelectionListener 
 			StringBuffer buf = new StringBuffer(viewStatus[0]);
 			for (int i = 1; i < viewStatus.length; i++)
 				buf.append("," + viewStatus[i]);
-			// JpcapDumper.JDProperty.setProperty("TableView",buf.toString());
+
 			JL2P.preferences.put("TableView", buf.toString());
 		}
 	}

@@ -1,25 +1,28 @@
-package jl2p.stat;
+package jl2p.statistics;
+
 import java.util.List;
-import java.util.Vector;
+
 import jpcap.packet.Packet;
 
-public abstract class StatisticsTaker
-{
+public abstract class Statistics {
 	public abstract String getName();
 
 	public abstract void analyze(List<Packet> packets);
+
 	public abstract void addPacket(Packet p);
-	
+
 	public abstract String[] getLabels();
+
 	public abstract String[] getStatTypes();
+
 	public abstract long[] getValues(int index);
-	
+
 	public abstract void clear();
-	
-	public StatisticsTaker newInstance(){
-		try{
-			return (StatisticsTaker)this.getClass().newInstance();
-		}catch(Exception e){
+
+	public Statistics newInstance() {
+		try {
+			return (Statistics) this.getClass().newInstance();
+		} catch (Exception e) {
 			return null;
 		}
 	}

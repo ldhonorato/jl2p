@@ -1,5 +1,5 @@
 package jl2p.ui;
-import jl2p.stat.StatisticsTaker;
+import jl2p.statistics.Statistics;
 import jl2p.ui.graph.LineGraph;
 import jpcap.packet.*;
 import java.awt.*;
@@ -7,23 +7,23 @@ import java.util.*;
 import java.util.List;
 
 
-public class ContinuousStatFrame extends StatFrame
+public class ContinuousStatFrame extends StatisticsFrame
 {
 	LineGraph lineGraph;
 	
-	StatisticsTaker staker;
+	Statistics staker;
 	int statType;
-	boolean drawTimescale; //true-> time, false->packet#
+	boolean drawTimescale; 
 	int count,currentCount=0;
 	long currentSec=0;
 	
-	public static ContinuousStatFrame openWindow(List<Packet> packets,StatisticsTaker staker){
+	public static ContinuousStatFrame openWindow(List<Packet> packets,Statistics staker){
 		ContinuousStatFrame frame=new ContinuousStatFrame(packets,5,true,staker,0);
 		frame.setVisible(true);
 		return frame;
 	}
 	
-	ContinuousStatFrame(List<Packet> packets,int count,boolean isTime,StatisticsTaker staker,int type){
+	ContinuousStatFrame(List<Packet> packets,int count,boolean isTime,Statistics staker,int type){
 		super(staker.getName()+" ["+staker.getStatTypes()[type]+"]");
 		this.staker=staker;
 		this.drawTimescale=isTime;this.count=count;

@@ -3,7 +3,7 @@ import java.util.*;
 
 import jl2p.analyzer.*;
 
-public class PacketAnalyzerLoader
+public class AnalyzerLoader
 {
 	static List<Analyzer> analyzers=new ArrayList<Analyzer>();
 	static List<List<Analyzer>> layerAnalyzers=new ArrayList<List<Analyzer>>();

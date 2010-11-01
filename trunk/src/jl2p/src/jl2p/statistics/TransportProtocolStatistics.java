@@ -1,21 +1,21 @@
-package jl2p.stat;
-import jl2p.PacketAnalyzerLoader;
+package jl2p.statistics;
+import jl2p.AnalyzerLoader;
 import jl2p.analyzer.Analyzer;
 import jpcap.packet.*;
 import java.util.*;
 
 
-public class TransportProtocolStat extends StatisticsTaker
+public class TransportProtocolStatistics extends Statistics
 {
 	List<Analyzer> analyzers;
 	long[] numOfPs;
 	long[] sizeOfPs;
 	long totalPs,totalSize;
 	String[] labels;
-	static final String[] types={"# of packets","% of packets","total packet size","% of size"};
+	static final String[] types={"# de pacotes", "% de pacotes", "tamanho total do pacote", "% do tamanho"};
 	
-	public TransportProtocolStat(){
-		analyzers=PacketAnalyzerLoader.getAnalyzersOf(Analyzer.TRANSPORT_LAYER);
+	public TransportProtocolStatistics(){
+		analyzers=AnalyzerLoader.getAnalyzersOf(Analyzer.TRANSPORT_LAYER);
 		numOfPs=new long[analyzers.size()+1];
 		sizeOfPs=new long[analyzers.size()+1];
 		
@@ -26,7 +26,7 @@ public class TransportProtocolStat extends StatisticsTaker
 	}
 	
 	public String getName(){
-		return "Transport Layer Protocol Ratio";
+		return "Protocolo da camada de transporte";
 	}
 	
 	public void analyze(List<Packet> packets){
@@ -101,51 +101,7 @@ public class TransportProtocolStat extends StatisticsTaker
 				return null;
 		}
 	}
-/*	int[] getValues(){
-		return numOfPs;
-	}
-	
-	String[] getTableLabels(){
-		String[] ls=new String[labels.length+1];
-		ls[0]=new String();
-		System.arraycopy(labels,0,ls,1,labels.length);
-		
-		return ls;
-	}
-	
-	Object[][] getTableValues(){
-		if(numOfPs==null) return new Object[0][0];
-		long sum=0;
-		Object[][] obj=new Object[4][labels.length+1];
-		
-		obj[0][0]="# of packets";
-		for(int i=0;i<numOfPs.length;i++){
-			obj[0][i+1]=new Long(numOfPs[i]);
-			sum+=numOfPs[i];
-		}
-		
-		obj[1][0]="% of packet #";
-		for(int i=0;i<numOfPs.length;i++){
-			if(sum==0) obj[1][i+1]=new Integer(0);
-			else obj[1][i+1]=new Integer(numOfPs[i]*100/(int)sum);
-		}
-		
-		sum=0;
-		obj[2][0]="size of packets";
-		for(int i=0;i<sizeOfPs.length;i++){
-			obj[2][i+1]=new Long(sizeOfPs[i]);
-			sum+=sizeOfPs[i];
-		}
-		
-		obj[3][0]="% of size";
-		for(int i=0;i<sizeOfPs.length;i++){
-			if(sum==0) obj[3][i+1]=new Long(0);
-			else obj[3][i+1]=new Long(sizeOfPs[i]*100/sum);
-		}
-		
-		return obj;
-	}
-	*/
+
 	public void clear(){
 		numOfPs=new long[analyzers.size()+1];
 		sizeOfPs=new long[analyzers.size()+1];

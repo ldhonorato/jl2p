@@ -11,18 +11,17 @@ import jpcap.packet.*;
 
 class Table extends JComponent
 {
-	JDTableModel model;
+	TableModel model;
 	TableSorter sorter;
 	Vector views=new Vector();
 	Captor captor;
 	
 	Table(TablePane parent,Captor captor){
 		this.captor=captor;
-		model=new JDTableModel();
-		sorter = new TableSorter(model);
-		//JTable table=new JTable(model);
+		model=new TableModel();
+		sorter = new TableSorter(model);		
 		JTable table = new JTable(sorter);
-		sorter.addMouseListenerToHeaderInTable(table); //ADDED THIS
+		sorter.addMouseListenerToHeaderInTable(table); 
 		
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.getSelectionModel().addListSelectionListener(parent);
@@ -33,16 +32,7 @@ class Table extends JComponent
 		add(tableView,BorderLayout.CENTER);
 	}
 	
-	/*void setPackets(Vector packets){
-		if(packets==null) return;
-		this.packets=packets;
-		model.fireTableStructureChanged();
-		model.fireTableDataChanged();
-	}*/
-	
-	void fireTableChanged(){
-		/*model.fireTableStructureChanged();
-		model.fireTableDataChanged();*/
+	void fireTableChanged(){	
 		model.fireTableRowsInserted(captor.getPackets().size()-1,captor.getPackets().size()-1);
 	}
 	
@@ -84,7 +74,7 @@ class Table extends JComponent
 		}
 	}
 	
-	class JDTableModel extends AbstractTableModel
+	class TableModel extends AbstractTableModel
 	{
 		public int getRowCount(){
 			return captor.getPackets().size();
@@ -117,17 +107,8 @@ class Table extends JComponent
 			}else{
 				return null;
 			}
-		}
-		
-    /*public Class getColumnClass(int c) {
-			for(int i=0;i<getRowCount();i++){
-				if(getValueAt(i,c)!=null && !"Not available".equals(getValueAt(i,c)))
-					return getValueAt(i, c).getClass();
-			}
-			
-			return String.class;
-    }*/
-		
+		}		
+   
 		public boolean isCellEditable(int row,int column){
 			return false;
 		}
