@@ -203,7 +203,6 @@ public class Captor {
 							hostnameCache.put(ip.src_ip, ip.src_ip.getHostName());
 						if (!hostnameCache.containsKey(ip.dst_ip))
 							hostnameCache.put(ip.dst_ip, ip.dst_ip.getHostName());
-//						System.out.println(hostnameCache.size());
 					}
 				});
 			}

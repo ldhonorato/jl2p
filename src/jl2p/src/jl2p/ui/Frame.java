@@ -36,29 +36,21 @@ public class Frame extends JFrame implements ActionListener {
 
 		setTitle("JL2P Sniffer - Gerência de Redes 2010.2 - UNIVERSIDADE DE PERNAMBUCO");
 
-		/*
-		 * JMenuBar menuBar=new JMenuBar(); setJMenuBar(menuBar);
-		 * 
-		 * JMenu menu = new JMenu("View"); menuBar.add(menu);
-		 * tablePane.setTableViewMenu(menu);
-		 */
-
-		// Create Toolbar
 		JToolBar toolbar = new JToolBar();
 		toolbar.setFloatable(false);
 
-//		openButton = new JButton(getImageIcon("/image/open.png"));
-//		openButton.setActionCommand("Open");
-//		openButton.addActionListener(this);
-//		toolbar.add(openButton);
-//
-//		saveButton = new JButton(getImageIcon("/image/save.png"));
-//		saveButton.setActionCommand("Save");
-//		saveButton.addActionListener(this);
-//		saveButton.setEnabled(false);
-//		toolbar.add(saveButton);
-//
-//		toolbar.addSeparator();
+		openButton = new JButton(getImageIcon("/image/open.png"));
+		openButton.setActionCommand("Open");
+		openButton.addActionListener(this);
+		toolbar.add(openButton);
+
+		saveButton = new JButton(getImageIcon("/image/save.png"));
+		saveButton.setActionCommand("Save");
+		saveButton.addActionListener(this);
+		saveButton.setEnabled(false);
+		toolbar.add(saveButton);
+
+		toolbar.addSeparator();
 
 		captureButton = new JButton(getImageIcon("/image/capture.png"));
 		captureButton.setActionCommand("Start");
@@ -170,8 +162,8 @@ public class Frame extends JFrame implements ActionListener {
 	}
 
 	public void enableCapture() {
-//		openButton.setEnabled(true);
-//		saveButton.setEnabled(true);
+		openButton.setEnabled(true);
+		saveButton.setEnabled(true);
 		captureButton.setEnabled(true);
 		stopButton.setEnabled(false);
 		graphic1Button.setEnabled(false);
@@ -179,9 +171,9 @@ public class Frame extends JFrame implements ActionListener {
 	}
 
 	public void disableCapture() {
-//		openButton.setEnabled(false);
+		openButton.setEnabled(false);
 		captureButton.setEnabled(false);
-//		saveButton.setEnabled(true);
+		saveButton.setEnabled(true);
 		stopButton.setEnabled(true);
 		graphic1Button.setEnabled(true);
 		graphic2Button.setEnabled(true);
