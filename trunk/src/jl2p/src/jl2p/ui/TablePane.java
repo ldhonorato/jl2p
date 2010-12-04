@@ -153,6 +153,10 @@ class TablePane extends JPanel implements ActionListener, ListSelectionListener 
 					}
 			}
 		}
+		
+		//TODO Mudar o nome da coluna
+		table.setTableView(null, "Source Port", true);
+		table.setTableView(null, "Destination Port", true);		
 	}
 
 	void saveProperty() {
